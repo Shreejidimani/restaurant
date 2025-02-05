@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block class %}class="sub_page"{% endblock class %}
+{% block order_status %}active{% endblock order_status %}
+{% block main %}
+
+<style>
+    .form_container {
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: auto;
+    }
+
+    .form_container label {
+        font-weight: bold;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form_container input, 
+    .form_container select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 15px;
+    }
+
+    .btn_box button {
+        width: 100%;
+        background-color: #ffbe33;
+        color: black;
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn_box button:hover {
+        background-color: #ff9b00;
+    }
+
+    .link_box {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .link_box a {
+        text-decoration: none;
+        color: #ff5722;
+        font-weight: bold;
+    }
+
+    .link_box a:hover {
+        color: #ff9b00;
+    }
+</style>
+
+<section class="order_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>Register</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form_container">
+                    <form method="POST" id="registerForm">
+                        {% csrf_token %}
+                        
+                        <label for="username">Username:</label>
+                        <input type="text" id="username" name="username" required>
+
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+
+                        <label for="password1">Password:</label>
+                        <input type="password" id="password1" name="password1" required>
+
+                        <label for="password2">Confirm Password:</label>
+                        <input type="password" id="password2" name="password2" required>
+
+                        {% if form.errors %}
+                            <div class="error">
+                                <ul>
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <li>{{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                    {% for error in form.non_field_errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <div class="btn_box">
+                            <button type="submit" id="registerBtn">Register</button>
+                        </div>
+                    </form>
+
+                    <div class="link_box">
+                        <p>Already registered? <a href="{% url 'login' %}">Login here</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+        var password1 = document.getElementById("password1").value;
+        var password2 = document.getElementById("password2").value;
+
+        if (password1 !== password2) {
+            alert("Passwords do not match!");
+            event.preventDefault();  // Prevent form submission
+        }
+    });
+</script>
+
+
+{% endblock main %}

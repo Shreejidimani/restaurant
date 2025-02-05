@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block class %}class="sub_page"{% endblock class %}
+{% block order_confirmation_status %}active{% endblock order_confirmation_status %}
+{% block main %}
+
+  <!-- start order confirmation section -->
+  <section class="order_confirmation_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Thank You for Your Order!
+        </h2>
+        <p>Your order has been placed successfully.</p>
+      </div>
+      <div class="row">
+        <div class="col-md-6 offset-md-3">
+          <div class="confirmation_box">
+            <h4>Order Details</h4>
+            {% if order %}
+              <p><strong>Item:</strong> {{ order.item.Item_name }}</p>
+              <p><strong>Name:</strong> {{ order.user_name }}</p>
+              <p><strong>Email:</strong> {{ order.user_email }}</p>
+              <p><strong>Address:</strong> {{ order.address }}</p>
+              <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+              <p><strong>Payment Option:</strong> {{ order.payment_option }}</p>
+              <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+              <p><strong>Total Price:</strong> ${{ order.total_price }}</p>  <!-- Assuming you have this field -->
+            {% else %}
+              <p>No order details available.</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="btn_box">
+        <a href="{% url 'Menu' %}" class="btn btn-primary">Return to Menu</a>
+      </div>
+    </div>
+  </section>
+  <!-- end order confirmation section -->
+
+{% endblock main %}

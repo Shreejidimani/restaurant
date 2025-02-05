@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block class %}class="sub_page"{% endblock class %}
+{% block order_status %}active{% endblock order_status %}
+{% block main %}
+<section class="order_section layout_padding">
+    <div class="container">
+        <div class="heading_container">
+            <h2>UPI Payment</h2>
+            <p>Your total amount is ₹{{ amount }}</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form_container">
+                    <h4>Scan the QR Code or Enter UPI ID</h4>
+                    
+                    <!-- Mock QR Code -->
+                    <div class="qr-code-container" style="text-align: center;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=mock@upi&pn=Mock%20Merchant&mc=1234&tid=123456789&tr=123456789&tn=Order%20Payment&am={{ amount }}&cu=INR" 
+                             alt="UPI QR Code" 
+                             style="width: 200px; height: 200px; margin: 10px auto; display: block;">
+                    </div>
+
+                    <!-- UPI ID Input -->
+                    <form method="POST">
+                        {% csrf_token %}
+                        <label for="upi_id">Enter UPI ID:</label>
+                        <input type="text" id="upi_id" name="upi_id" required />
+                        <button type="submit">Confirm Payment</button>
+                    </form>
+                    {% if invalid_upi %}
+                        <div class="error">Invalid UPI ID. Please enter a valid ID.</div>
+                    {% endif %}
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .form_container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+{% endblock main %}
