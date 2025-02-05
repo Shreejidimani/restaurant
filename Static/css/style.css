@@ -1,4 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap");
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
 body {
   font-family: "Open Sans", sans-serif;
   color: #0c0c0c;
@@ -1003,5 +1009,32 @@ a:focus {
 
 .footer_section .footer-info p a {
   color: inherit;
+}
+
+/* Ensure the body takes full height and uses flexbox for layout */
+.main-content {
+    flex: 1;
+}
+
+/* Footer should be pushed to the bottom */
+.footer {
+    margin-top: auto;
+}
+
+/* Additional styles for category filters */
+.category-filters {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.category-filters a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+.category-filters a:hover {
+    color: #007bff;
 }
 /*# sourceMappingURL=style.css.map */

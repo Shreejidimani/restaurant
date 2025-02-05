@@ -12,6 +12,7 @@ from Base_App.models import BookTable, AboutUs, Feedback, ItemList, Items, Order
 from django.core.paginator import Paginator
 from django import forms
 from django.contrib.auth.models import User
+from django.utils.http import urlencode
 
 # Custom User Creation Form
 class CustomUserCreationForm(UserCreationForm):
@@ -45,11 +46,11 @@ def AboutView(request):
     return render(request, 'about.html', {'data': data})
 
 def MenuView(request):
+    categories = ItemList.objects.all()  # Fetch all categories
     items = Items.objects.all()  # Fetch all items
-    item_categories = Category.objects.all()  # Fetch all categories
     return render(request, 'menu.html', {
         'items': items,
-        'item_categories': item_categories
+        'categories': categories
     })
 
 def menu_category(request, category_id):
@@ -129,35 +130,28 @@ def OrderConfirmationView(request, order_id):
 
 UPI_REGEX = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+$'
 
+
 def upi_payment_page(request, order_id):
     order = get_object_or_404(Order, id=order_id)
 
-    if request.method == 'POST':
-        upi_id = request.POST.get('upi_id')
+    # Generate UPI Payment URL
+    upi_data = {
+        "pa": "merchant@upi",  # Replace with actual UPI ID
+        "pn": "Merchant Name",
+        "am": str(order.total_price),
+        "cu": "INR",
+        "tn": "Order Payment"
+    }
+    upi_url = f"upi://pay?{urlencode(upi_data)}"
 
-        if re.match(UPI_REGEX, upi_id):
-            order.upi_id = upi_id
-            order.status = 'Paid'
-            order.save()
-            return redirect(reverse('order_confirmation', kwargs={'order_id': order.id}))
-        else:
-            messages.error(request, "Invalid UPI ID. Please enter a valid UPI ID.")
-            return render(request, 'upi_payment.html', {'order': order})
-
-    return render(request, 'upi_payment.html', {'order': order})
+    return render(request, 'upi_payment.html', {"order": order, "upi_url": upi_url})
 
 
 def mock_payment_success(request, order_id):
     order = get_object_or_404(Order, id=order_id)
 
     if request.method == "POST":
-        upi_id = request.POST.get('upi_id')
-
-        if not re.match(UPI_REGEX, upi_id):
-            messages.error(request, "Invalid UPI ID format. Please enter a valid UPI ID.")
-            return render(request, 'upi_payment.html', {'order': order})
-
-        order.upi_id = upi_id
+        # Simulating a successful payment
         order.status = 'Paid'
         order.save()
 
@@ -185,23 +179,23 @@ def update_order_status(request, order_id, status):
 
 def FeedbackView(request):
     reviews = Feedback.objects.all()  # Fetch all feedback from the database
-    return render(request, 'feedback.html', {'review': reviews})
+    return render(request, 'feedback.html', {'reviews': reviews})
 
 def submit_feedback(request):
     if request.method == 'POST':
-        user_name = request.POST['user_name']
-        description = request.POST['Description']
-        rating = request.POST['total_person']
-        image = request.FILES['image']  # Get the uploaded image
+        user_name = request.POST.get('user_name')  # Use .get() for safe access
+        description = request.POST.get('Description')
+        rating = request.POST.get('total_person')
+        image = request.FILES.get('image')  # Use .get() to avoid potential KeyErrors
 
         # Save the feedback to the database
         feedback = Feedback(User_name=user_name, Description=description, Rating=rating, Image=image)
         feedback.save()
 
-        return redirect('home')  # Redirect to the home page or a thank you page
+        # Redirect to 'home' after successfully saving the feedback
+        return redirect('home')  # Ensure 'home' is the correct URL name in urls.py
 
-    return render(request, 'feedback.html') # Redirect to the home page or a thank you page
-
+    # Render the feedback form on GET request
     return render(request, 'feedback.html')
 @login_required
 def user_profile(request):
@@ -249,4 +243,3 @@ def login_view(request):
             messages.error(request, "Invalid username/email or password.")
 
     return render(request, "registration/login.html", {"form": form})
-

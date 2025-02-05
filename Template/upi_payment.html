@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-
 {% load static %}
 {% block class %}class="sub_page"{% endblock class %}
 {% block order_status %}active{% endblock order_status %}
@@ -8,33 +7,35 @@
     <div class="container">
         <div class="heading_container">
             <h2>UPI Payment</h2>
-            <p>Your total amount is ₹{{ amount }}</p>
+            <p>Your total amount is ₹{{ order.total_price }}</p>
         </div>
 
         <div class="row">
             <div class="col-md-6">
                 <div class="form_container">
-                    <h4>Scan the QR Code or Enter UPI ID</h4>
-                    
-                    <!-- Mock QR Code -->
+                    <h4>Scan the QR Code</h4>
+
+                    <!-- QR Code -->
                     <div class="qr-code-container" style="text-align: center;">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=mock@upi&pn=Mock%20Merchant&mc=1234&tid=123456789&tr=123456789&tn=Order%20Payment&am={{ amount }}&cu=INR" 
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data={{ upi_url|urlencode }}" 
                              alt="UPI QR Code" 
                              style="width: 200px; height: 200px; margin: 10px auto; display: block;">
                     </div>
+                    <p style="text-align: center;">Scan the QR code to pay using your UPI app.</p>
 
-                    <!-- UPI ID Input -->
-                    <form method="POST">
+                    <!-- "Payment Done" Button -->
+                    <form action="{% url 'mock_payment_success' order.id %}" method="POST">
                         {% csrf_token %}
-                        <label for="upi_id">Enter UPI ID:</label>
-                        <input type="text" id="upi_id" name="upi_id" required />
-                        <button type="submit">Confirm Payment</button>
+                        <button type="submit" class="confirm-payment">Payment Done</button>
                     </form>
-                    {% if invalid_upi %}
-                        <div class="error">Invalid UPI ID. Please enter a valid ID.</div>
+
+                    {% if messages %}
+                        <div class="success-message">
+                            {% for message in messages %}
+                                <p>{{ message }}</p>
+                            {% endfor %}
+                        </div>
                     {% endif %}
-                    
-                    
                 </div>
             </div>
         </div>
@@ -42,12 +43,18 @@
 </section>
 
 <style>
-    .form_container {
-        background: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    .confirm-payment {
+        background: green;
+        color: white;
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        display: block;
+        text-align: center;
+        width: 100%;
     }
 </style>
+
 
 {% endblock main %}

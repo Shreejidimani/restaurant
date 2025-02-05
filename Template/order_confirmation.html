@@ -5,39 +5,103 @@
 {% block order_confirmation_status %}active{% endblock order_confirmation_status %}
 {% block main %}
 
-  <!-- start order confirmation section -->
-  <section class="order_confirmation_section layout_padding">
+<!-- start order confirmation section -->
+<section class="order_confirmation_section layout_padding">
     <div class="container">
-      <div class="heading_container heading_center">
-        <h2>
-          Thank You for Your Order!
-        </h2>
-        <p>Your order has been placed successfully.</p>
-      </div>
-      <div class="row">
-        <div class="col-md-6 offset-md-3">
-          <div class="confirmation_box">
-            <h4>Order Details</h4>
-            {% if order %}
-              <p><strong>Item:</strong> {{ order.item.Item_name }}</p>
-              <p><strong>Name:</strong> {{ order.user_name }}</p>
-              <p><strong>Email:</strong> {{ order.user_email }}</p>
-              <p><strong>Address:</strong> {{ order.address }}</p>
-              <p><strong>Quantity:</strong> {{ order.quantity }}</p>
-              <p><strong>Payment Option:</strong> {{ order.payment_option }}</p>
-              <p><strong>Order Date:</strong> {{ order.created_at }}</p>
-              <p><strong>Total Price:</strong> ${{ order.total_price }}</p>  <!-- Assuming you have this field -->
-            {% else %}
-              <p>No order details available.</p>
-            {% endif %}
-          </div>
+        <div class="heading_container heading_center">
+            <h2>Thank You for Your Order!</h2>
+            <p>Your order has been placed successfully.</p>
         </div>
-      </div>
-      <div class="btn_box">
-        <a href="{% url 'Menu' %}" class="btn btn-primary">Return to Menu</a>
-      </div>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <div class="confirmation_box">
+                    <h4>Order Details</h4>
+                    {% if order %}
+                        <div class="order_detail">
+                            <p><strong>Item:</strong> {{ order.item.Item_name }}</p>
+                            <p><strong>Name:</strong> {{ order.user_name }}</p>
+                            <p><strong>Email:</strong> {{ order.user_email }}</p>
+                            <p><strong>Address:</strong> {{ order.address }}</p>
+                            <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+                            <p><strong>Payment Option:</strong> {{ order.payment_option }}</p>
+                            <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+                            <p><strong>Total Price:</strong> ₹{{ order.total_price }}</p>  <!-- Assuming you have this field -->
+                        </div>
+                    {% else %}
+                        <p>No order details available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="btn_box text-center">
+            <a href="{% url 'Menu' %}" class="btn btn-yellow">Return to Menu</a>
+        </div>
     </div>
-  </section>
-  <!-- end order confirmation section -->
+</section>
+<!-- end order confirmation section -->
+
+<style>
+    .order_confirmation_section {
+        background-color: #f9f9f9;
+        padding: 50px 0;
+    }
+
+    .heading_container {
+        margin-bottom: 30px;
+    }
+
+    .heading_container h2 {
+        font-size: 2.5rem;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .heading_container p {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .confirmation_box {
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    .confirmation_box h4 {
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+
+    .order_detail p {
+        font-size: 1.1rem;
+        margin: 10px 0;
+        color: #555;
+    }
+
+    .btn_box {
+        margin-top: 30px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-size: 1.1rem;
+        border-radius: 25px; /* Rounded corners */
+        transition: background-color 0.3s;
+        text-decoration: none; /* Remove underline */
+        display: inline-block; /* Ensure proper spacing */
+    }
+
+    .btn-yellow {
+        background-color: #FFD700; /* Yellow color */
+        color: #fff; /* White text */
+    }
+
+    .btn-yellow:hover {
+        background-color: #FFC300; /* Darker yellow on hover */
+    }
+</style>
 
 {% endblock main %}

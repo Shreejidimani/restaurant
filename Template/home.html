@@ -1035,35 +1035,36 @@
             </h2>
         </div>
         
-        <div class="carousel-wrap row ">
+        <div class="carousel-wrap row">
             <div class="owl-carousel client_owl-carousel">
-                {% for k in review %}
+                {% for k in reviews %}
                 <div class="item">
                     <div class="box">
                         <div class="detail-box">
                             <p>
-                                {{ k.Description }}
+                                {{ k.Description }}  <!-- Display the feedback description -->
                             </p>
                             <h6>
-                                {{ k.User_name }}
+                                {{ k.User_name }}  <!-- Display the user's name -->
                             </h6>
                             <p>
-                                Rating: {{ k.Rating }}/5
+                                Rating: {{ k.Rating }}/5  <!-- Display the rating -->
                             </p>
                         </div>
                         <div class="img-box">
-                            <img src="{{ k.Image.url }}" alt="{{ k.Image }}" class="box-img">  <!-- Use .url to get the image URL -->
+                            <img src="{{ k.Image.url }}" alt="Feedback Image" class="box-img">  <!-- Display the uploaded image -->
                         </div>
                     </div>
                 </div>
                 {% empty %}
-                <p>No reviews available.</p>  <!-- Optional: Message if no reviews are found -->
+                <p>No reviews available.</p>  <!-- Message if no reviews are found -->
                 {% endfor %}
             </div>
         </div>
         
     </div>
 </section>
+
 
   <!-- end client section -->
 
